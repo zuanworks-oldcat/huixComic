@@ -18,8 +18,6 @@ namespace comic
 
     public partial class Form1 : Form
     {
-
-        private bool[] bgStatus = new bool[3];
         private string GetHttpWebRequest(object urll)
         {
             string strHTML = "";
@@ -40,57 +38,10 @@ namespace comic
             //in:websource
             return strHTML;
         }
+
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)//button_begin
-        {
-            textBox_images.Text = "";
-            do
-            {
-                Task<string> t1 = Task<string>.Factory.StartNew(new Func<object, string>(GetHttpWebRequest), (object)textBox_URL.Text);
-                List<int> index = new List<int>();
-                toolStripProgressBar.Minimum = 0;
-                toolStripProgressBar.Maximum = 60;
-                toolStripProgressBar.Value = 0;
-                toolStripStatusLabel.Text = "等待主页获取";
-                if (!t1.IsCompleted) Application.DoEvents();
-                Application.DoEvents();
-                for (int i = 0; i < 1000; i++) { label1.MaximumSize = new Size(1000 + i, 1000 + i); };//无奈之举
-                if (!t1.IsFaulted)
-                {
-                    textBox_webSource.Text = t1.Result;
-                    string webs = textBox_webSource.Text;
-                    //Regex.Matches(webs,"")
-                    //MessageBox.Show(index.Count.ToString());
-                    fzdm imageGeter = new fzdm();
-                    textBox_images.Text += imageGeter.getImageURL(webs) + "\r\n";
-                    textBox_URL.Text = imageGeter.getNextURL(webs, textBox_URL.Text);
-                }
-                else
-                {
-                    break;
-                }
-            } while (textBox_URL.Text != "");
-        }
-        bool DebugFlag = false;
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //if (DebugFlag)
-            //{
-            //    DebugFlag = false;
-            //    textBox_webSource.Visible=true;
-            //}
-            //else
-            //{
-            //    DebugFlag = true;
-            //    textBox_URL.BringToFront();
-            //}
-            textBox_webSource.BringToFront();
-            DebugFlag = !DebugFlag;
-            textBox_webSource.Visible = DebugFlag;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -115,7 +66,7 @@ namespace comic
                 string mc = Interaction.InputBox("输入章节名称", "询问：");
                 if (mc == "") return;
                 ListViewItem i = new ListViewItem();
-                i.Text = "章>详";
+                i.Text = "章>址";
                 i.SubItems.Add(ask);
                 i.SubItems.Add(mc);
                 i.SubItems.Add("---");
