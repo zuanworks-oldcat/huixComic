@@ -33,12 +33,12 @@ namespace comic
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.ToString());
+                MessageBox.Show("发生了个错误：无法读取网页，一般是服务器挂了\n错误信息\n"+e.ToString()+"\n如果一直出现这个错误，当我（这个信息框）在显示的时候，直接按下Ctrl+c就可以复制错误信息给我咯！");
             }
             //in:websource
             return strHTML;
         }
-
+        
         public Form1()
         {
             InitializeComponent();

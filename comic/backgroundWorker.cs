@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 namespace comic
@@ -193,11 +195,24 @@ namespace comic
                     break;
                 case 3:
                     #region 图>址
-                    MessageBox.Show(string.Format("下载网站{0}下载到{1}",get.value, get.pName));
-                    Thread.Sleep(500);
+                    get.pName = get.pName.Replace("/", "\\");
+                    string dir = get.pName.Substring(0,get.pName.LastIndexOf("\\") + 1);
+                    if (Directory.Exists(dir) == false)//如果不存在就创建file文件夹
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+                    WebClient myw = new WebClient();
+                    try
+                    {
+                        myw.DownloadFile(get.value, get.pName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(string.Format("下载网站{0}下载到{1}失败：{2}", get.value, get.pName, ex.Message));
+                    }
                     completeMessage q = new completeMessage();
-                    r.bgNum = get.bgNum;
-                    e.Result = r;
+                    q.bgNum = get.bgNum;
+                    e.Result = q;
                     #endregion
                     break;
             }
