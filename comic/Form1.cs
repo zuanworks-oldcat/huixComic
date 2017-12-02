@@ -22,13 +22,21 @@ namespace comic
         private bool[] bgStatus = new bool[3];
         private string GetHttpWebRequest(object urll)
         {
-            string url = urll as string;
             string strHTML = "";
-            WebClient myWebClient = new WebClient();
-            Stream myStream = myWebClient.OpenRead(url);
-            StreamReader sr = new StreamReader(myStream, Encoding.GetEncoding("utf-8"));
-            strHTML = sr.ReadToEnd();
-            myStream.Close();
+            try
+            {
+                string url = urll as string;
+                
+                WebClient myWebClient = new WebClient();
+                Stream myStream = myWebClient.OpenRead(url);
+                StreamReader sr = new StreamReader(myStream, Encoding.GetEncoding("utf-8"));
+                strHTML = sr.ReadToEnd();
+                myStream.Close();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
             //in:websource
             return strHTML;
         }

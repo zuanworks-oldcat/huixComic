@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace comic
@@ -31,16 +32,15 @@ namespace comic
         {
             //MessageBox.Show(@"mhurl\s\=\s\" + "\"" + @"([^\n] *\" + @".jpg)\" + "\"" + ";");
             //MatchCollection mc = Regex.Matches(detail_context, @"mhurl\s\=\s\"+"\""+@"([^\n] *\"+@".jpg)\"+"\""+";");
-            Base64Decoder t = new Base64Decoder();
-            Match m = Regex.Match(detail_context, t.GetDecoded("bWh1cmxcc1w9XHNcIihbXlxuXSpcLmpwZylcIjs=").ToString());
+            string reg = Encoding.UTF8.GetString(Convert.FromBase64String("bWh1cmxcc1w9XHNcIihbXlxuXSpcLmpwZylcIjs="));
+            Match m = Regex.Match(detail_context,reg);
             return "http://p1.xiaoshidi.net/" + m.Groups[1];
         }
 
         public string getNextURL(string detail_context, string nowURL)
         {
             //匹配下一页URL
-            Base64Decoder t = new Base64Decoder();
-            Match m = Regex.Match(detail_context, t.GetDecoded("PGEgaHJlZj0nKGluZGV4X1xkKlwuaHRtbCknIGlkPSJtaG9uYSI+5LiL5LiA6aG1PC9hPg==").ToString());
+            Match m = Regex.Match(detail_context, Encoding.UTF8.GetString(Convert.FromBase64String("PGEgaHJlZj0nKGluZGV4X1xkKlwuaHRtbCknIGlkPSJtaG9uYSI+5LiL5LiA6aG1PC9hPg==")));
             if (m.Groups[1].ToString() != "")
             {
                 //匹配主链接

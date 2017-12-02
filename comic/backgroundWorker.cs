@@ -164,7 +164,7 @@ namespace comic
                                 bgw.ReportProgress(1,repo);
                             }
                             repo.tName = i.ToString();
-                            URL = imageGeter.getNextURL(source, textBox_URL.Text);
+                            URL = imageGeter.getNextURL(source, URL);
                         }
                         else
                         {
