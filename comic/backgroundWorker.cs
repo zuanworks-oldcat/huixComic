@@ -19,6 +19,11 @@ namespace comic
             pushMessage to = new pushMessage();
             switch (listView1.Items[0].Text)
             {
+                case "全>章":
+                    //MessageBox.Show(string.Format("网站：“{0}”", listView1.Items[0].SubItems[1].Text));
+                    to.type = 1;
+                    to.value = listView1.Items[0].SubItems[1].Text;
+                    break;
                 case "章>址":
                     //MessageBox.Show(string.Format("章节名称：“{0}”,网站：“{1}”", listView1.Items[0].SubItems[2].Text, listView1.Items[0].SubItems[1].Text));
                     to.type = 2;
@@ -111,11 +116,13 @@ namespace comic
                     bgStatus[2] = false;
                     break;
             }
+            if(checkBox_auto.Checked)
             new_call();
         }
 
         private void bgReportProcess(object sender, ProgressChangedEventArgs e)
         {
+            try { 
             reportMessage repo = (reportMessage)e.UserState;
             ListViewItem add = new ListViewItem();
             switch (repo.type)
@@ -123,6 +130,11 @@ namespace comic
                 case 1:
                     break;
                 case 2:
+                    add.Text = "章>址";
+                    add.SubItems.Add(repo.value);
+                    add.SubItems.Add(repo.zName);
+                    add.SubItems.Add("---");
+                    listView1.Items.Add(add);
                     break;
                 case 3:
                     add.Text = "址>值";
@@ -132,89 +144,130 @@ namespace comic
                     listView1.Items.Add(add);
                     break;
             }
-            new_call();
+            if (checkBox_auto.Checked)
+                new_call();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         #endregion
 
         private void bgDowork(object sender, DoWorkEventArgs e)
         {
-            pushMessage get = (pushMessage)e.Argument;
-            switch (get.type)
+            try
             {
-                case 1:
-                    break;
-                case 2:
-                    #region 章>址
-                    //MessageBox.Show(string.Format(
-                    //        "章节转图片详情\n章节名称：“{0}”\n网址：“{1}”",
-                    //        get.zName,
-                    //        get.value
-                    //        ));
-                    string URL = get.value;
-                    bool failed = false;
-                    string source = "";
-                    int i = 0;
-                    do
-                    {
+                pushMessage get = (pushMessage)e.Argument;
+                fzdm imageGeter = new fzdm();
+                switch (get.type)
+                {
+                    case 1:
+                        #region 全>章
+                        string mURL = get.value;
+                        string msource = "";
                         try
                         {
-                            source = GetHttpWebRequest(URL);
+                            msource = GetHttpWebRequest(mURL);
                         }
                         catch
                         {
-                            failed = true;
+                            completeMessage w = new completeMessage();
+                            w.bgNum = get.bgNum;
+                            e.Result = w;
                         }
-                        if (!failed)
+                        List<List<string>> ww = imageGeter.getAllUnitURLs(msource);
+                        foreach (List<string> www in ww)
                         {
-                            //Regex.Matches(webs,"")
-                            //MessageBox.Show(index.Count.ToString());
-                            fzdm imageGeter = new fzdm();
-                            reportMessage repo = new reportMessage();
-                            repo.type = 3;
-                            repo.value = imageGeter.getImageURL(source);
-                            repo.zName = get.zName;
-                            i++;
-                            repo.tName = i.ToString();
-                            BackgroundWorker bgw = (BackgroundWorker)sender;
-                            if (!bgw.CancellationPending)
+                            if (www.Count == 2)
                             {
-                                bgw.ReportProgress(1,repo);
+                                reportMessage rep = new reportMessage();
+                                rep.type = 2;
+                                rep.value = get.value + www[0];
+                                rep.zName = www[1];
+                                BackgroundWorker bgww = (BackgroundWorker)sender;
+                                if (!bgww.CancellationPending)
+                                {
+                                    bgww.ReportProgress(1, rep);
+                                }
                             }
-                            URL = imageGeter.getNextURL(source, URL);
                         }
-                        else
+                        #endregion
+                        break;
+                    case 2:
+                        #region 章>址
+                        //MessageBox.Show(string.Format(
+                        //        "章节转图片详情\n章节名称：“{0}”\n网址：“{1}”",
+                        //        get.zName,
+                        //        get.value
+                        //        ));
+                        string URL = get.value;
+                        bool failed = false;
+                        string source = "";
+                        int i = 0;
+                        do
                         {
-                            break;
+                            try
+                            {
+                                source = GetHttpWebRequest(URL);
+                            }
+                            catch
+                            {
+                                failed = true;
+                            }
+                            if (!failed)
+                            {
+                                //Regex.Matches(webs,"")
+                                //MessageBox.Show(index.Count.ToString());
+
+                                reportMessage repo = new reportMessage();
+                                repo.type = 3;
+                                repo.value = imageGeter.getImageURL(source);
+                                repo.zName = get.zName;
+                                i++;
+                                repo.tName = i.ToString();
+                                BackgroundWorker bgw = (BackgroundWorker)sender;
+                                if (!bgw.CancellationPending)
+                                {
+                                    bgw.ReportProgress(1, repo);
+                                }
+                                URL = imageGeter.getNextURL(source, URL);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        } while (URL != "");
+                        #endregion
+                        break;
+                    case 3:
+                        #region 图>址
+                        get.pName = get.pName.Replace("/", "\\");
+                        string dir = get.pName.Substring(0, get.pName.LastIndexOf("\\") + 1);
+                        if (Directory.Exists(dir) == false)//如果不存在就创建file文件夹
+                        {
+                            Directory.CreateDirectory(dir);
                         }
-                    } while (URL != "");
-                    completeMessage r = new completeMessage();
-                    r.bgNum = get.bgNum;
-                    e.Result = r;
-                    #endregion
-                    break;
-                case 3:
-                    #region 图>址
-                    get.pName = get.pName.Replace("/", "\\");
-                    string dir = get.pName.Substring(0,get.pName.LastIndexOf("\\") + 1);
-                    if (Directory.Exists(dir) == false)//如果不存在就创建file文件夹
-                    {
-                        Directory.CreateDirectory(dir);
-                    }
-                    WebClient myw = new WebClient();
-                    try
-                    {
-                        myw.DownloadFile(get.value, get.pName);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(string.Format("下载网站{0}下载到{1}失败：{2}", get.value, get.pName, ex.Message));
-                    }
-                    completeMessage q = new completeMessage();
-                    q.bgNum = get.bgNum;
-                    e.Result = q;
-                    #endregion
-                    break;
+                        WebClient myw = new WebClient();
+                        try
+                        {
+                            myw.DownloadFile(get.value, get.pName);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(string.Format("下载网站{0}下载到{1}失败：{2}", get.value, get.pName, ex.Message));
+                        }
+                        #endregion
+                        break;
+                }
+                completeMessage r = new completeMessage();
+                r.bgNum = get.bgNum;
+                e.Result = r;
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
             }
         }
     }

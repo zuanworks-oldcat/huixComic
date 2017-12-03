@@ -80,8 +80,29 @@ namespace comic
             bgStatus[1] = false;
             bgStatus[2] = false;
         }
-        
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            string ask = Interaction.InputBox("输入首页的链接", "询问：", "http://");
+            if (ask != "")
+            {
+                ListViewItem i = new ListViewItem();
+                i.Text = "全>章";
+                i.SubItems.Add(ask);
+                i.SubItems.Add("---");
+                i.SubItems.Add("---");
+                listView1.Items.Add(i);
+            }
+        }
+
+        private void button_remove_Click(object sender, EventArgs e)
+        {
+            int Index = 0;
+            if (listView1.SelectedItems.Count > 0)//判断listview有被选中项  
+            {
+                Index = listView1.SelectedItems[0].Index;//取当前选中项的index,SelectedItems[0]这必须为0         
+                listView1.Items[Index].Remove();
+            }
+        }
     }
-    
-    
 }

@@ -55,6 +55,8 @@ namespace comic
             this.textBox_path = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
+            this.checkBox_auto = new System.Windows.Forms.CheckBox();
+            this.button_remove = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -72,18 +74,23 @@ namespace comic
             // bgWorker1
             // 
             this.bgWorker1.WorkerReportsProgress = true;
+            this.bgWorker1.WorkerSupportsCancellation = true;
             this.bgWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgDowork);
             this.bgWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgReportProcess);
             this.bgWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgComplete);
             // 
             // bgWorker3
             // 
+            this.bgWorker3.WorkerReportsProgress = true;
+            this.bgWorker3.WorkerSupportsCancellation = true;
             this.bgWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgDowork);
             this.bgWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgReportProcess);
             this.bgWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgComplete);
             // 
             // bgWorker2
             // 
+            this.bgWorker2.WorkerReportsProgress = true;
+            this.bgWorker2.WorkerSupportsCancellation = true;
             this.bgWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgDowork);
             this.bgWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgReportProcess);
             this.bgWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgComplete);
@@ -120,11 +127,13 @@ namespace comic
             // 
             // listView1
             // 
+            this.listView1.AllowColumnReorder = true;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
+            this.listView1.HoverSelection = true;
             this.listView1.Location = new System.Drawing.Point(14, 33);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(355, 322);
@@ -160,12 +169,13 @@ namespace comic
             this.button2.TabIndex = 24;
             this.button2.Text = "添加任务";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.Aqua;
             this.button3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button3.Location = new System.Drawing.Point(192, 4);
+            this.button3.Location = new System.Drawing.Point(156, 5);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(67, 23);
             this.button3.TabIndex = 25;
@@ -177,7 +187,7 @@ namespace comic
             // 
             this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.button5.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button5.Location = new System.Drawing.Point(301, 4);
+            this.button5.Location = new System.Drawing.Point(229, 4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(67, 24);
             this.button5.TabIndex = 27;
@@ -277,11 +287,33 @@ namespace comic
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // checkBox_auto
+            // 
+            this.checkBox_auto.AutoSize = true;
+            this.checkBox_auto.Location = new System.Drawing.Point(302, 9);
+            this.checkBox_auto.Name = "checkBox_auto";
+            this.checkBox_auto.Size = new System.Drawing.Size(72, 16);
+            this.checkBox_auto.TabIndex = 36;
+            this.checkBox_auto.Text = "自动开始";
+            this.checkBox_auto.UseVisualStyleBackColor = true;
+            // 
+            // button_remove
+            // 
+            this.button_remove.Location = new System.Drawing.Point(285, 361);
+            this.button_remove.Name = "button_remove";
+            this.button_remove.Size = new System.Drawing.Size(75, 22);
+            this.button_remove.TabIndex = 37;
+            this.button_remove.Text = "删除选中项";
+            this.button_remove.UseVisualStyleBackColor = true;
+            this.button_remove.Click += new System.EventHandler(this.button_remove_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(649, 423);
+            this.Controls.Add(this.button_remove);
+            this.Controls.Add(this.checkBox_auto);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
@@ -337,6 +369,8 @@ namespace comic
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.CheckBox checkBox_auto;
+        private System.Windows.Forms.Button button_remove;
     }
 }
 
