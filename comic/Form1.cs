@@ -18,26 +18,7 @@ namespace comic
 
     public partial class Form1 : Form
     {
-        private string GetHttpWebRequest(object urll)
-        {
-            string strHTML = "";
-            try
-            {
-                string url = urll as string;
-                
-                WebClient myWebClient = new WebClient();
-                Stream myStream = myWebClient.OpenRead(url);
-                StreamReader sr = new StreamReader(myStream, Encoding.GetEncoding("utf-8"));
-                strHTML = sr.ReadToEnd();
-                myStream.Close();
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show("发生了个错误：无法读取网页，一般是服务器挂了\n错误信息\n"+e.ToString()+"\n如果一直出现这个错误，当我（这个信息框）在显示的时候，直接按下Ctrl+c就可以复制错误信息给我咯！");
-            }
-            //in:websource
-            return strHTML;
-        }
+        
         
         public Form1()
         {
@@ -97,11 +78,13 @@ namespace comic
 
         private void button_remove_Click(object sender, EventArgs e)
         {
-            int Index = 0;
-            if (listView1.SelectedItems.Count > 0)//判断listview有被选中项  
+            //listView2.MultiSelect = true;
+            foreach (ListViewItem var in listView1.Items)
             {
-                Index = listView1.SelectedItems[0].Index;//取当前选中项的index,SelectedItems[0]这必须为0         
-                listView1.Items[Index].Remove();
+                if (var.Selected)
+                {
+                    var.Remove();
+                }
             }
         }
     }

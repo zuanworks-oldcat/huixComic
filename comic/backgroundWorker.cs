@@ -17,25 +17,7 @@ namespace comic
         {
             if (listView1.Items.Count == 0) return;
             pushMessage to = new pushMessage();
-            switch (listView1.Items[0].Text)
-            {
-                case "全>章":
-                    //MessageBox.Show(string.Format("网站：“{0}”", listView1.Items[0].SubItems[1].Text));
-                    to.type = 1;
-                    to.value = listView1.Items[0].SubItems[1].Text;
-                    break;
-                case "章>址":
-                    //MessageBox.Show(string.Format("章节名称：“{0}”,网站：“{1}”", listView1.Items[0].SubItems[2].Text, listView1.Items[0].SubItems[1].Text));
-                    to.type = 2;
-                    to.value = listView1.Items[0].SubItems[1].Text;
-                    to.zName = listView1.Items[0].SubItems[2].Text;
-                    break;
-                case "址>值":
-                    to.type = 3;
-                    to.value = listView1.Items[0].SubItems[1].Text;
-                    to.pName = string.Format(textBox_path.Text,listView1.Items[0].SubItems[2].Text, listView1.Items[0].SubItems[3].Text);
-                    break;
-            }
+            to.item = listView1.Items[0];
             if (!bgStatus[0])
             {
                 bgStatus[0] = true;
@@ -160,85 +142,32 @@ namespace comic
             try
             {
                 pushMessage get = (pushMessage)e.Argument;
-                fzdm imageGeter = new fzdm();
+                #region 初始化explainer
+                explainer imageGeter = _select(get.value);
+                string mURL = get.value;
+                string msource = "";
+                try
+                {
+                    msource = happyapps.GetHttpWebRequest(mURL);
+                }
+                catch
+                {
+                    completeMessage w = new completeMessage();
+                    w.bgNum = get.bgNum;
+                    e.Result = w;
+                }
+                imageGeter.init((BackgroundWorker)sender, msource, get.value, get);
+                #endregion
                 switch (get.type)
                 {
                     case 1:
                         #region 全>章
-                        string mURL = get.value;
-                        string msource = "";
-                        try
-                        {
-                            msource = GetHttpWebRequest(mURL);
-                        }
-                        catch
-                        {
-                            completeMessage w = new completeMessage();
-                            w.bgNum = get.bgNum;
-                            e.Result = w;
-                        }
-                        List<List<string>> ww = imageGeter.getAllUnitURLs(msource);
-                        foreach (List<string> www in ww)
-                        {
-                            if (www.Count == 2)
-                            {
-                                reportMessage rep = new reportMessage();
-                                rep.type = 2;
-                                rep.value = get.value + www[0];
-                                rep.zName = www[1];
-                                BackgroundWorker bgww = (BackgroundWorker)sender;
-                                if (!bgww.CancellationPending)
-                                {
-                                    bgww.ReportProgress(1, rep);
-                                }
-                            }
-                        }
+                        imageGeter.getAllUnits();
                         #endregion
                         break;
                     case 2:
                         #region 章>址
-                        //MessageBox.Show(string.Format(
-                        //        "章节转图片详情\n章节名称：“{0}”\n网址：“{1}”",
-                        //        get.zName,
-                        //        get.value
-                        //        ));
-                        string URL = get.value;
-                        bool failed = false;
-                        string source = "";
-                        int i = 0;
-                        do
-                        {
-                            try
-                            {
-                                source = GetHttpWebRequest(URL);
-                            }
-                            catch
-                            {
-                                failed = true;
-                            }
-                            if (!failed)
-                            {
-                                //Regex.Matches(webs,"")
-                                //MessageBox.Show(index.Count.ToString());
-
-                                reportMessage repo = new reportMessage();
-                                repo.type = 3;
-                                repo.value = imageGeter.getImageURL(source);
-                                repo.zName = get.zName;
-                                i++;
-                                repo.tName = i.ToString();
-                                BackgroundWorker bgw = (BackgroundWorker)sender;
-                                if (!bgw.CancellationPending)
-                                {
-                                    bgw.ReportProgress(1, repo);
-                                }
-                                URL = imageGeter.getNextURL(source, URL);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        } while (URL != "");
+                        imageGeter.getImageURLs();
                         #endregion
                         break;
                     case 3:
@@ -272,17 +201,91 @@ namespace comic
         }
     }
 
+    public class messageMaker
+    {
+        public reportMessage report(int type, string value, string zname = "", string tname = "")
+        {
+            reportMessage repo = new reportMessage();
+            repo.type = type;
+            repo.value = value;
+            repo.zName = zname;
+            repo.tName = tname;
+            return repo;
+        }
+    }
+
     public struct pushMessage
     {
+        /*
+         
+            if (!bgStatus[0])
+            {
+                bgStatus[0] = true;
+                to.bgNum = 1;
+                bgWorker1.RunWorkerAsync(to);
+            }
+            else if (!bgStatus[1])
+            {
+                bgStatus[1] = true;
+                to.bgNum = 2;
+                bgWorker2.RunWorkerAsync(to);
+            }
+            else if (!bgStatus[2])
+            {
+                bgStatus[2] = true;
+                to.bgNum = 3;
+                bgWorker3.RunWorkerAsync(to);
+            }
+            else return;
+            setTipLabel(to);
+            listView1.Items.Remove(listView1.Items[0]);*/
         /// <summary>
         /// 1.全>章,2.章>址,3.址>值
         /// </summary>
         public int type;
+        private string cache;
         public string value;
         public string zName;
         public string tName;
         public string pName;
         public int bgNum;
+        public ListViewItem item
+        {
+            set
+            {
+                switch (value.Text)
+                {
+                    case "全>章":
+                        //MessageBox.Show(string.Format("网站：“{0}”", listView1.Items[0].SubItems[1].Text));
+                        type = 1;
+                        this.value = value.SubItems[1].Text;
+                        break;
+                    case "章>址":
+                        //MessageBox.Show(string.Format("章节名称：“{0}”,网站：“{1}”", listView1.Items[0].SubItems[2].Text, listView1.Items[0].SubItems[1].Text));
+                        type = 2;
+                        this.value = value.SubItems[1].Text;
+                        zName = value.SubItems[2].Text;
+                        break;
+                    case "址>值":
+                        type = 3;
+                        this.value = value.SubItems[1].Text;
+                        //pName = string.Format(textBox_path.Text, listView1.Items[0].SubItems[2].Text, listView1.Items[0].SubItems[3].Text);
+                        cache = value.SubItems[3].Text;
+                        break;
+                }
+            }
+        }
+        public string path
+        {
+            get
+            {
+                return pName;
+            }
+            set
+            {
+                pName = string.Format(value, zName, cache);
+            }
+        }
     }
 
     public struct reportMessage
