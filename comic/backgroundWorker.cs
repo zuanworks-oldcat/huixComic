@@ -10,80 +10,87 @@ namespace comic
     public partial class Form1
     {
         private bool[] bgStatus = new bool[3];
-
+        private Dictionary<uint, BackgroundWorker> BGWs = new Dictionary<uint, BackgroundWorker>();
+        private Dictionary<uint, string> BGWinfos = new Dictionary<uint, string>();
+        private Dictionary<uint, ListViewItem> BGWitems = new Dictionary<uint, ListViewItem>();
+        private uint BGWtos;
         #region 主线程方法/委托方法
 
         private void new_call()
         {
+            if (BGWs.Count >= Convert.ToInt32(textBox_maxBGWs.Text))
+            {
+                return;
+            }
             if (listView1.Items.Count == 0) return;
             pushMessage to = new pushMessage();
-            to.item = listView1.Items[0];
+            to.item = happyapps.DeepCopy(listView1.Items[0]);
             to.path = textBox_path.Text;
-            if (!bgStatus[0])
+            uint myBGnumber = BGWtos;
+            to.bgNum = myBGnumber;
+            BGWtos++;
+            if (BGWtos >= 4294967290)
             {
-                bgStatus[0] = true;
-                to.bgNum = 1;
-                bgWorker1.RunWorkerAsync(to);
+                textBox_out.Text += "孩纸你要逆天了，建议你重启一下软件来保持本软件的神清气爽" + "\r\n";
+                BGWtos = 1;
             }
-            else if (!bgStatus[1])
+            BackgroundWorker waitforadd = new BackgroundWorker();
+            waitforadd.WorkerReportsProgress = true;
+            waitforadd.WorkerSupportsCancellation = true;
+            waitforadd.DoWork += bgDowork;
+            waitforadd.RunWorkerCompleted += bgComplete;
+            waitforadd.ProgressChanged += bgReportProcess;
+            string info = "";
+            switch (to.type)
             {
-                bgStatus[1] = true;
-                to.bgNum = 2;
-                bgWorker2.RunWorkerAsync(to);
+                case 1:
+                    break;
+                case 2:
+                    info =
+                        string.Format(
+                            "章节转图片详情:“{1}”->“{0}”",
+                            to.zName,
+                            to.value
+                            );
+                    break;
+                case 3:
+                    info =
+                        string.Format(
+                            "下载:“{0}”->“{1}”",
+                            to.value,
+                            to.pName
+                            );
+                    break;
             }
-            else if (!bgStatus[2])
-            {
-                bgStatus[2] = true;
-                to.bgNum = 3;
-                bgWorker3.RunWorkerAsync(to);
-            }
-            else return;
-            setTipLabel(to);
+            waitforadd.RunWorkerAsync(to);
+            BGWs.Add(myBGnumber, waitforadd);
+            BGWinfos.Add(myBGnumber, info);
+            BGWitems.Add(myBGnumber, happyapps.DeepCopy(listView1.Items[0]));
+            setTipLabel();
             listView1.Items.Remove(listView1.Items[0]);
+            new_call();
         }
 
-        private void setTipLabel(pushMessage p)
+        private void setTipLabel()
         {
-            Label wait;
-            switch (p.bgNum)
+            listView3.BeginUpdate();
+            listView3.Items.Clear();
+            foreach (KeyValuePair<uint, BackgroundWorker> var in BGWs)
             {
-                case 1:
-                    wait = label_bg_1;
-                    break;
-                case 2:
-                    wait = label_bg_2;
-                    break;
-                case 3:
-                    wait = label_bg_3;
-                    break;
-                default:
-                    throw new Exception("No certain backgroundWorker");
+                ListViewItem n = new ListViewItem();
+                n.Text = var.Key.ToString();
+                n.SubItems.Add(BGWinfos[var.Key]);
+                listView3.Items.Add(n);
             }
-            switch (p.type)
-            {
-                case 1:
-                    break;
-                case 2:
-                    wait.Text =
-                        string.Format(
-                            "章节转图片详情\n章节名称：“{0}”\n网址：“{1}”",
-                            p.zName,
-                            p.value
-                            );
-                    break;
-                case 3:
-                    wait.Text =
-                        string.Format(
-                            "下载图片\n网址：“{0}”\n到：\n“{1}”",
-                            p.value,
-                            p.pName
-                            );
-                    break;
-            }
+            listView3.EndUpdate();
         }
 
         private void bgComplete(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Cancelled)
+            {
+                return;
+            }
             if (e.Error != null)
             {
                 if (((BackgroundWorkerException)e.Error).e is DownloadFailException)
@@ -107,43 +114,20 @@ namespace comic
                     textBox_out.Text += ((BackgroundWorkerException)e.Error).e.Source + "\r\n";
                 }
                 listView2.Items.Add(((BackgroundWorkerException)e.Error).push.i.i);
-                switch (((BackgroundWorkerException)e.Error).push.bgNum)
-                {
-                    case 1:
-                        label_bg_1.Text = "就绪\n欢迎使用";
-                        bgStatus[0] = false;
-                        break;
-                    case 2:
-                        label_bg_2.Text = "就绪\n欢迎使用";
-                        bgStatus[1] = false;
-                        break;
-                    case 3:
-                        label_bg_3.Text = "就绪\n欢迎使用";
-                        bgStatus[2] = false;
-                        break;
-                }
+                BGWs.Remove(((BackgroundWorkerException)e.Error).push.bgNum);
+                BGWinfos.Remove(((BackgroundWorkerException)e.Error).push.bgNum);
+                BGWitems.Remove(((BackgroundWorkerException)e.Error).push.bgNum);
             }
             else
             {
-                switch (((completeMessage)e.Result).bgNum)
-                {
-                    case 1:
-                        label_bg_1.Text = "就绪\n欢迎使用";
-                        bgStatus[0] = false;
-                        break;
-                    case 2:
-                        label_bg_2.Text = "就绪\n欢迎使用";
-                        bgStatus[1] = false;
-                        break;
-                    case 3:
-                        label_bg_3.Text = "就绪\n欢迎使用";
-                        bgStatus[2] = false;
-                        break;
-                }
+                dones++;
+                BGWs.Remove(((completeMessage)e.Result).bgNum);
+                BGWinfos.Remove(((completeMessage)e.Result).bgNum);
+                BGWitems.Remove(((completeMessage)e.Result).bgNum);
             }
             if (checkBox_auto.Checked)
                 new_call();
-
+            setTipLabel();
         }
 
         private void bgReportProcess(object sender, ProgressChangedEventArgs e)
@@ -157,6 +141,7 @@ namespace comic
                     case 1:
                         break;
                     case 2:
+                        news++;
                         add.Text = "章>址";
                         add.SubItems.Add(repo.value);
                         add.SubItems.Add(repo.zName);
@@ -164,6 +149,7 @@ namespace comic
                         listView1.Items.Add(add);
                         break;
                     case 3:
+                        news++;
                         add.Text = "址>值";
                         add.SubItems.Add(repo.value);
                         add.SubItems.Add(repo.zName);
@@ -190,13 +176,15 @@ namespace comic
             e.Result = r;
             try
             {
-
                 #region 初始化explainer
-                explainer imageGeter = _select(get.value);
+                explainer imageGeter = new fzdm();
+                if (get.type == 3) goto jumpToDownload;
+                imageGeter = _select(get.value);
                 string mURL = get.value;
                 string msource = "";
                 msource = happyapps.GetHttpWebRequest(mURL);
                 imageGeter.init((BackgroundWorker)sender, msource, get.value, get);
+                jumpToDownload:
                 #endregion
                 switch (get.type)
                 {
@@ -231,7 +219,7 @@ namespace comic
                         break;
                 }
             }
-            catch(Exception exx)
+            catch (Exception exx)
             {
                 r.item = get;
                 throw new BackgroundWorkerException(exx, r);
@@ -286,7 +274,7 @@ namespace comic
         public string zName;
         public string tName;
         public string pName;
-        public int bgNum;
+        public uint bgNum;
         public ListViewItem i;
         public ListViewItem item
         {
@@ -339,7 +327,7 @@ namespace comic
 
     public struct completeMessage
     {
-        public int bgNum;
+        public uint bgNum;
         public pushMessage i
         {
             private set;

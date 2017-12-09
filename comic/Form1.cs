@@ -18,8 +18,8 @@ namespace comic
 
     public partial class Form1 : Form
     {
-        
-        
+
+
         public Form1()
         {
             InitializeComponent();
@@ -41,6 +41,8 @@ namespace comic
         }
         private void button3_Click_1(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            timer1.Enabled = true;
             string ask = Interaction.InputBox("输入一章开头的链接", "询问：", "http://");
             if (ask != "")
             {
@@ -65,6 +67,8 @@ namespace comic
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            timer1.Enabled = true;
             string ask = Interaction.InputBox("输入首页的链接", "询问：", "http://");
             if (ask != "")
             {
@@ -115,6 +119,41 @@ namespace comic
                     var.Remove();
                 }
             }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(textBox_maxBGs_C.Text) > 0 && Convert.ToInt32(textBox_maxBGs_C.Text) < 100)
+            {
+                textBox_maxBGWs.Text = Convert.ToInt32(textBox_maxBGs_C.Text).ToString();
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            int c = 0;
+            foreach (ListViewItem var in listView3.Items)
+            {
+                c++;
+                if (!var.Selected) continue;
+                BGWs[Convert.ToUInt32(var.Text)].CancelAsync();
+                listView2.Items.Add(happyapps.DeepCopy(BGWitems[Convert.ToUInt32(var.Text)]));
+                BGWs.Remove(Convert.ToUInt32(var.Text));
+                BGWinfos.Remove(Convert.ToUInt32(var.Text));
+                BGWitems.Remove(Convert.ToUInt32(var.Text));
+            }
+            if (c != 0) textBox_out.Text += "本次将" + c.ToString() + "个任务取消" + "\r\n";
+            setTipLabel();
+        }
+
+        int news = 0;
+        int dones = 0;
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label_status.Text = string.Format("完成{1}个任务，新增{0}个任务（上一秒）", news.ToString(), dones.ToString());
+            news = 0;
+            dones = 0;
         }
     }
 }
