@@ -21,7 +21,6 @@ namespace comic
         explainer _select(string url)
         {
             if (select_fzdm(url)) return new fzdm();
-
             else throw new Exception("No explainer matches");
         }
     }

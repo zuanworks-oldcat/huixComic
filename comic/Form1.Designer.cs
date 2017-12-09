@@ -57,6 +57,16 @@ namespace comic
             this.button6 = new System.Windows.Forms.Button();
             this.checkBox_auto = new System.Windows.Forms.CheckBox();
             this.button_remove = new System.Windows.Forms.Button();
+            this.listView2 = new System.Windows.Forms.ListView();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.textBox_out = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -134,7 +144,7 @@ namespace comic
             this.columnHeader3,
             this.columnHeader4});
             this.listView1.HoverSelection = true;
-            this.listView1.Location = new System.Drawing.Point(14, 33);
+            this.listView1.Location = new System.Drawing.Point(15, 33);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(355, 322);
             this.listView1.TabIndex = 23;
@@ -307,11 +317,99 @@ namespace comic
             this.button_remove.UseVisualStyleBackColor = true;
             this.button_remove.Click += new System.EventHandler(this.button_remove_Click);
             // 
+            // listView2
+            // 
+            this.listView2.AllowColumnReorder = true;
+            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7,
+            this.columnHeader8});
+            this.listView2.HoverSelection = true;
+            this.listView2.Location = new System.Drawing.Point(642, 33);
+            this.listView2.Name = "listView2";
+            this.listView2.Size = new System.Drawing.Size(355, 167);
+            this.listView2.TabIndex = 38;
+            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listView2.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "类型";
+            this.columnHeader5.Width = 51;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "网址";
+            this.columnHeader6.Width = 180;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "章节名称";
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "图片序号";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(640, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 39;
+            this.label1.Text = "错误列表";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(642, 206);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(99, 23);
+            this.button1.TabIndex = 40;
+            this.button1.Text = "<<";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // textBox_out
+            // 
+            this.textBox_out.Location = new System.Drawing.Point(642, 235);
+            this.textBox_out.Multiline = true;
+            this.textBox_out.Name = "textBox_out";
+            this.textBox_out.ReadOnly = true;
+            this.textBox_out.Size = new System.Drawing.Size(355, 182);
+            this.textBox_out.TabIndex = 41;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(770, 206);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(99, 23);
+            this.button4.TabIndex = 42;
+            this.button4.Text = "删除";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(898, 206);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(99, 23);
+            this.button7.TabIndex = 43;
+            this.button7.Text = "清空错误";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 423);
+            this.ClientSize = new System.Drawing.Size(1009, 423);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.textBox_out);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.listView2);
             this.Controls.Add(this.button_remove);
             this.Controls.Add(this.checkBox_auto);
             this.Controls.Add(this.button6);
@@ -371,6 +469,16 @@ namespace comic
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.CheckBox checkBox_auto;
         private System.Windows.Forms.Button button_remove;
+        private System.Windows.Forms.ListView listView2;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ColumnHeader columnHeader7;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox_out;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button7;
     }
 }
 

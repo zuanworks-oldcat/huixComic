@@ -18,6 +18,7 @@ namespace comic
             if (listView1.Items.Count == 0) return;
             pushMessage to = new pushMessage();
             to.item = listView1.Items[0];
+            to.path = textBox_path.Text;
             if (!bgStatus[0])
             {
                 bgStatus[0] = true;
@@ -83,53 +84,97 @@ namespace comic
 
         private void bgComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            switch (((completeMessage)e.Result).bgNum)
+            if (e.Error != null)
             {
-                case 1:
-                    label_bg_1.Text = "就绪\n欢迎使用";
-                    bgStatus[0] = false;
-                    break;
-                case 2:
-                    label_bg_2.Text = "就绪\n欢迎使用";
-                    bgStatus[1] = false;
-                    break;
-                case 3:
-                    label_bg_3.Text = "就绪\n欢迎使用";
-                    bgStatus[2] = false;
-                    break;
+                if (((BackgroundWorkerException)e.Error).e is DownloadFailException)
+                {
+                    textBox_out.Text += "----下载出错----" + "\r\n";
+                    textBox_out.Text += ((DownloadFailException)((BackgroundWorkerException)e.Error).e).URL + "\r\n";
+                    textBox_out.Text += ((DownloadFailException)((BackgroundWorkerException)e.Error).e).WebInfo.Message + "\r\n";
+                    textBox_out.Text += "----------------" + "\r\n";
+                }
+                else if (((BackgroundWorkerException)e.Error).e is NoSupportExplainerException)
+                {
+                    textBox_out.Text += "--不支持的链接--" + "\r\n";
+                    textBox_out.Text += ((NoSupportExplainerException)((BackgroundWorkerException)e.Error).e).url + "\r\n";
+                    textBox_out.Text += "----------------" + "\r\n";
+                }
+                else
+                {
+                    textBox_out.Text += "!!!!未知错误!!!!" + "\r\n";
+                    textBox_out.Text += ((BackgroundWorkerException)e.Error).e.Message + "\r\n";
+                    textBox_out.Text += ((BackgroundWorkerException)e.Error).e.StackTrace + "\r\n";
+                    textBox_out.Text += ((BackgroundWorkerException)e.Error).e.Source + "\r\n";
+                }
+                listView2.Items.Add(((BackgroundWorkerException)e.Error).push.i.i);
+                switch (((BackgroundWorkerException)e.Error).push.bgNum)
+                {
+                    case 1:
+                        label_bg_1.Text = "就绪\n欢迎使用";
+                        bgStatus[0] = false;
+                        break;
+                    case 2:
+                        label_bg_2.Text = "就绪\n欢迎使用";
+                        bgStatus[1] = false;
+                        break;
+                    case 3:
+                        label_bg_3.Text = "就绪\n欢迎使用";
+                        bgStatus[2] = false;
+                        break;
+                }
             }
-            if(checkBox_auto.Checked)
-            new_call();
+            else
+            {
+                switch (((completeMessage)e.Result).bgNum)
+                {
+                    case 1:
+                        label_bg_1.Text = "就绪\n欢迎使用";
+                        bgStatus[0] = false;
+                        break;
+                    case 2:
+                        label_bg_2.Text = "就绪\n欢迎使用";
+                        bgStatus[1] = false;
+                        break;
+                    case 3:
+                        label_bg_3.Text = "就绪\n欢迎使用";
+                        bgStatus[2] = false;
+                        break;
+                }
+            }
+            if (checkBox_auto.Checked)
+                new_call();
+
         }
 
         private void bgReportProcess(object sender, ProgressChangedEventArgs e)
         {
-            try { 
-            reportMessage repo = (reportMessage)e.UserState;
-            ListViewItem add = new ListViewItem();
-            switch (repo.type)
+            try
             {
-                case 1:
-                    break;
-                case 2:
-                    add.Text = "章>址";
-                    add.SubItems.Add(repo.value);
-                    add.SubItems.Add(repo.zName);
-                    add.SubItems.Add("---");
-                    listView1.Items.Add(add);
-                    break;
-                case 3:
-                    add.Text = "址>值";
-                    add.SubItems.Add(repo.value);
-                    add.SubItems.Add(repo.zName);
-                    add.SubItems.Add(repo.tName);
-                    listView1.Items.Add(add);
-                    break;
+                reportMessage repo = (reportMessage)e.UserState;
+                ListViewItem add = new ListViewItem();
+                switch (repo.type)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        add.Text = "章>址";
+                        add.SubItems.Add(repo.value);
+                        add.SubItems.Add(repo.zName);
+                        add.SubItems.Add("---");
+                        listView1.Items.Add(add);
+                        break;
+                    case 3:
+                        add.Text = "址>值";
+                        add.SubItems.Add(repo.value);
+                        add.SubItems.Add(repo.zName);
+                        add.SubItems.Add(repo.tName);
+                        listView1.Items.Add(add);
+                        break;
+                }
+                if (checkBox_auto.Checked)
+                    new_call();
             }
-            if (checkBox_auto.Checked)
-                new_call();
-            }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -139,23 +184,18 @@ namespace comic
 
         private void bgDowork(object sender, DoWorkEventArgs e)
         {
+            pushMessage get = (pushMessage)e.Argument;
+            completeMessage r = new completeMessage();
+            r.bgNum = get.bgNum;
+            e.Result = r;
             try
             {
-                pushMessage get = (pushMessage)e.Argument;
+
                 #region 初始化explainer
                 explainer imageGeter = _select(get.value);
                 string mURL = get.value;
                 string msource = "";
-                try
-                {
-                    msource = happyapps.GetHttpWebRequest(mURL);
-                }
-                catch
-                {
-                    completeMessage w = new completeMessage();
-                    w.bgNum = get.bgNum;
-                    e.Result = w;
-                }
+                msource = happyapps.GetHttpWebRequest(mURL);
                 imageGeter.init((BackgroundWorker)sender, msource, get.value, get);
                 #endregion
                 switch (get.type)
@@ -183,20 +223,18 @@ namespace comic
                         {
                             myw.DownloadFile(get.value, get.pName);
                         }
-                        catch (Exception ex)
+                        catch (WebException ex)
                         {
-                            MessageBox.Show(string.Format("下载网站{0}下载到{1}失败：{2}", get.value, get.pName, ex.Message));
+                            throw new DownloadFailException(get.value, ex);
                         }
                         #endregion
                         break;
                 }
-                completeMessage r = new completeMessage();
-                r.bgNum = get.bgNum;
-                e.Result = r;
             }
-            catch (Exception exp)
+            catch(Exception exx)
             {
-                MessageBox.Show(exp.Message);
+                r.item = get;
+                throw new BackgroundWorkerException(exx, r);
             }
         }
     }
@@ -249,10 +287,12 @@ namespace comic
         public string tName;
         public string pName;
         public int bgNum;
+        public ListViewItem i;
         public ListViewItem item
         {
             set
             {
+                i = value;
                 switch (value.Text)
                 {
                     case "全>章":
@@ -270,6 +310,7 @@ namespace comic
                         type = 3;
                         this.value = value.SubItems[1].Text;
                         //pName = string.Format(textBox_path.Text, listView1.Items[0].SubItems[2].Text, listView1.Items[0].SubItems[3].Text);
+                        zName = value.SubItems[2].Text;
                         cache = value.SubItems[3].Text;
                         break;
                 }
@@ -299,5 +340,93 @@ namespace comic
     public struct completeMessage
     {
         public int bgNum;
+        public pushMessage i
+        {
+            private set;
+            get;
+        }
+        public pushMessage item
+        {
+            set
+            {
+                bgNum = value.bgNum;
+                i = value;
+            }
+        }
+    }
+
+    public class DownloadFailException : Exception
+    {
+        public DownloadFailException(string url, WebException webi)
+        {
+            URL = url;
+            WebInfo = webi;
+        }
+        private string uRL;
+        private WebException webInfo;
+
+        public string URL
+        {
+            get
+            {
+                return uRL;
+            }
+
+            private set
+            {
+                uRL = value;
+            }
+        }
+
+        public WebException WebInfo
+        {
+            get
+            {
+                return webInfo;
+            }
+
+            private set
+            {
+                webInfo = value;
+            }
+        }
+    }
+
+    public class ExplainFailException : Exception
+    {
+        public ExplainFailException()
+        {
+
+        }
+    }
+
+    public class NoSupportExplainerException : Exception
+    {
+        public NoSupportExplainerException(string URL)
+        {
+            url = URL;
+        }
+
+        public string url { get; private set; }
+    }
+
+    public class BackgroundWorkerException : Exception
+    {
+        public Exception e
+        {
+            private set;
+            get;
+        }
+        public completeMessage push
+        {
+            get;
+            private set;
+        }
+
+        public BackgroundWorkerException(Exception ex, completeMessage pu)
+        {
+            e = ex;
+            push = pu;
+        }
     }
 }

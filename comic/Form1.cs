@@ -60,6 +60,7 @@ namespace comic
             bgStatus[0] = false;
             bgStatus[1] = false;
             bgStatus[2] = false;
+            button7_Click(new object(), new EventArgs());
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -80,6 +81,34 @@ namespace comic
         {
             //listView2.MultiSelect = true;
             foreach (ListViewItem var in listView1.Items)
+            {
+                if (var.Selected)
+                {
+                    var.Remove();
+                }
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            textBox_out.Text = "huixComic ver:" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\r\n";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem var in listView2.Items)
+            {
+                if (var.Selected)
+                {
+                    listView1.Items.Add(happyapps.DeepCopy(var));
+                    var.Remove();
+                }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem var in listView2.Items)
             {
                 if (var.Selected)
                 {

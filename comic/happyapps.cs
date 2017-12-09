@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 
@@ -8,6 +9,21 @@ namespace comic
 {
     public static class happyapps
     {
+        public static T DeepCopy<T>(T obj)
+        {
+            object retval;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                //序列化成流
+                bf.Serialize(ms, obj);
+                ms.Seek(0, SeekOrigin.Begin);
+                //反序列化成对象
+                retval = bf.Deserialize(ms);
+                ms.Close();
+            }
+            return (T)retval;
+        }
         public static string GetHttpWebRequest(object urll)
         {
             string strHTML = "";
@@ -21,9 +37,9 @@ namespace comic
                 strHTML = sr.ReadToEnd();
                 myStream.Close();
             }
-            catch (Exception e)
+            catch (WebException e)
             {
-                MessageBox.Show("发生了个错误：无法读取网页，一般是服务器挂了\n错误信息\n" + e.ToString() + "\n如果一直出现这个错误，当我（这个信息框）在显示的时候，直接按下Ctrl+c就可以复制错误信息给我咯！");
+                throw new DownloadFailException(urll as string, e);
             }
             //in:websource
             return strHTML;
