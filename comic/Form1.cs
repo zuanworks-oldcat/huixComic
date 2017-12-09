@@ -41,6 +41,8 @@ namespace comic
         }
         private void button3_Click_1(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            timer1.Enabled = true;
             string ask = Interaction.InputBox("输入一章开头的链接", "询问：", "http://");
             if (ask != "")
             {
@@ -65,6 +67,8 @@ namespace comic
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+            panel1.Visible = false;
+            timer1.Enabled = true;
             string ask = Interaction.InputBox("输入首页的链接", "询问：", "http://");
             if (ask != "")
             {
@@ -140,6 +144,16 @@ namespace comic
             }
             if (c != 0) textBox_out.Text += "本次将" + c.ToString() + "个任务取消" + "\r\n";
             setTipLabel();
+        }
+
+        int news = 0;
+        int dones = 0;
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label_status.Text = string.Format("完成{1}个任务，新增{0}个任务（上一秒）", news.ToString(), dones.ToString());
+            news = 0;
+            dones = 0;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace comic
             waitforadd.DoWork += bgDowork;
             waitforadd.RunWorkerCompleted += bgComplete;
             waitforadd.ProgressChanged += bgReportProcess;
-            string info ="";
+            string info = "";
             switch (to.type)
             {
                 case 1:
@@ -75,7 +75,7 @@ namespace comic
         {
             listView3.BeginUpdate();
             listView3.Items.Clear();
-            foreach(KeyValuePair<uint,BackgroundWorker> var in BGWs)
+            foreach (KeyValuePair<uint, BackgroundWorker> var in BGWs)
             {
                 ListViewItem n = new ListViewItem();
                 n.Text = var.Key.ToString();
@@ -120,6 +120,7 @@ namespace comic
             }
             else
             {
+                dones++;
                 BGWs.Remove(((completeMessage)e.Result).bgNum);
                 BGWinfos.Remove(((completeMessage)e.Result).bgNum);
                 BGWitems.Remove(((completeMessage)e.Result).bgNum);
@@ -140,6 +141,7 @@ namespace comic
                     case 1:
                         break;
                     case 2:
+                        news++;
                         add.Text = "章>址";
                         add.SubItems.Add(repo.value);
                         add.SubItems.Add(repo.zName);
@@ -147,6 +149,7 @@ namespace comic
                         listView1.Items.Add(add);
                         break;
                     case 3:
+                        news++;
                         add.Text = "址>值";
                         add.SubItems.Add(repo.value);
                         add.SubItems.Add(repo.zName);
@@ -216,7 +219,7 @@ namespace comic
                         break;
                 }
             }
-            catch(Exception exx)
+            catch (Exception exx)
             {
                 r.item = get;
                 throw new BackgroundWorkerException(exx, r);
