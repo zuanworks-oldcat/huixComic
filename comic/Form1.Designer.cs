@@ -31,9 +31,6 @@ namespace comic
         private void InitializeComponent()
         {
             this.label5 = new System.Windows.Forms.Label();
-            this.bgWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.bgWorker3 = new System.ComponentModel.BackgroundWorker();
-            this.bgWorker2 = new System.ComponentModel.BackgroundWorker();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -45,12 +42,6 @@ namespace comic
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label_bg_1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label_bg_2 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label_bg_3 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox_path = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -67,9 +58,13 @@ namespace comic
             this.textBox_out = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.textBox_maxBGWs = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.listView3 = new System.Windows.Forms.ListView();
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.textBox_maxBGs_C = new System.Windows.Forms.TextBox();
+            this.button8 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label5
@@ -80,30 +75,6 @@ namespace comic
             this.label5.Size = new System.Drawing.Size(65, 12);
             this.label5.TabIndex = 17;
             this.label5.Text = "任务列表：";
-            // 
-            // bgWorker1
-            // 
-            this.bgWorker1.WorkerReportsProgress = true;
-            this.bgWorker1.WorkerSupportsCancellation = true;
-            this.bgWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgDowork);
-            this.bgWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgReportProcess);
-            this.bgWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgComplete);
-            // 
-            // bgWorker3
-            // 
-            this.bgWorker3.WorkerReportsProgress = true;
-            this.bgWorker3.WorkerSupportsCancellation = true;
-            this.bgWorker3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgDowork);
-            this.bgWorker3.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgReportProcess);
-            this.bgWorker3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgComplete);
-            // 
-            // bgWorker2
-            // 
-            this.bgWorker2.WorkerReportsProgress = true;
-            this.bgWorker2.WorkerSupportsCancellation = true;
-            this.bgWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgDowork);
-            this.bgWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgReportProcess);
-            this.bgWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgComplete);
             // 
             // label6
             // 
@@ -143,7 +114,6 @@ namespace comic
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.listView1.HoverSelection = true;
             this.listView1.Location = new System.Drawing.Point(15, 33);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(355, 322);
@@ -203,63 +173,6 @@ namespace comic
             this.button5.TabIndex = 27;
             this.button5.Text = "添加任务";
             this.button5.UseVisualStyleBackColor = false;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label_bg_1);
-            this.groupBox1.Location = new System.Drawing.Point(375, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(259, 108);
-            this.groupBox1.TabIndex = 28;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "进程1";
-            // 
-            // label_bg_1
-            // 
-            this.label_bg_1.AutoSize = true;
-            this.label_bg_1.Location = new System.Drawing.Point(6, 17);
-            this.label_bg_1.Name = "label_bg_1";
-            this.label_bg_1.Size = new System.Drawing.Size(65, 24);
-            this.label_bg_1.TabIndex = 0;
-            this.label_bg_1.Text = "就绪\r\n欢迎使用！";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label_bg_2);
-            this.groupBox2.Location = new System.Drawing.Point(375, 159);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(259, 108);
-            this.groupBox2.TabIndex = 29;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "进程2";
-            // 
-            // label_bg_2
-            // 
-            this.label_bg_2.AutoSize = true;
-            this.label_bg_2.Location = new System.Drawing.Point(6, 17);
-            this.label_bg_2.Name = "label_bg_2";
-            this.label_bg_2.Size = new System.Drawing.Size(65, 24);
-            this.label_bg_2.TabIndex = 1;
-            this.label_bg_2.Text = "就绪\r\n欢迎使用！";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.label_bg_3);
-            this.groupBox3.Location = new System.Drawing.Point(375, 312);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(259, 108);
-            this.groupBox3.TabIndex = 29;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "进程3";
-            // 
-            // label_bg_3
-            // 
-            this.label_bg_3.AutoSize = true;
-            this.label_bg_3.Location = new System.Drawing.Point(6, 17);
-            this.label_bg_3.Name = "label_bg_3";
-            this.label_bg_3.Size = new System.Drawing.Size(65, 24);
-            this.label_bg_3.TabIndex = 2;
-            this.label_bg_3.Text = "就绪\r\n欢迎使用！";
             // 
             // label11
             // 
@@ -325,7 +238,6 @@ namespace comic
             this.columnHeader6,
             this.columnHeader7,
             this.columnHeader8});
-            this.listView2.HoverSelection = true;
             this.listView2.Location = new System.Drawing.Point(642, 33);
             this.listView2.Name = "listView2";
             this.listView2.Size = new System.Drawing.Size(355, 167);
@@ -399,11 +311,77 @@ namespace comic
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // textBox_maxBGWs
+            // 
+            this.textBox_maxBGWs.ImeMode = System.Windows.Forms.ImeMode.AlphaFull;
+            this.textBox_maxBGWs.Location = new System.Drawing.Point(505, 402);
+            this.textBox_maxBGWs.MaxLength = 2;
+            this.textBox_maxBGWs.Name = "textBox_maxBGWs";
+            this.textBox_maxBGWs.ReadOnly = true;
+            this.textBox_maxBGWs.Size = new System.Drawing.Size(33, 21);
+            this.textBox_maxBGWs.TabIndex = 45;
+            this.textBox_maxBGWs.Text = "5";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(374, 405);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(125, 12);
+            this.label2.TabIndex = 46;
+            this.label2.Text = "最大线程数（1-99）：";
+            // 
+            // listView3
+            // 
+            this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader9,
+            this.columnHeader10});
+            this.listView3.Location = new System.Drawing.Point(378, 33);
+            this.listView3.Name = "listView3";
+            this.listView3.Size = new System.Drawing.Size(258, 369);
+            this.listView3.TabIndex = 47;
+            this.listView3.UseCompatibleStateImageBehavior = false;
+            this.listView3.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "#";
+            // 
+            // columnHeader10
+            // 
+            this.columnHeader10.Text = "事务信息";
+            this.columnHeader10.Width = 189;
+            // 
+            // textBox_maxBGs_C
+            // 
+            this.textBox_maxBGs_C.ImeMode = System.Windows.Forms.ImeMode.AlphaFull;
+            this.textBox_maxBGs_C.Location = new System.Drawing.Point(544, 402);
+            this.textBox_maxBGs_C.MaxLength = 2;
+            this.textBox_maxBGs_C.Name = "textBox_maxBGs_C";
+            this.textBox_maxBGs_C.Size = new System.Drawing.Size(33, 21);
+            this.textBox_maxBGs_C.TabIndex = 48;
+            this.textBox_maxBGs_C.Text = "5";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(583, 402);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(53, 21);
+            this.button8.TabIndex = 49;
+            this.button8.Text = "改";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1009, 423);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.textBox_maxBGs_C);
+            this.Controls.Add(this.listView3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.textBox_maxBGWs);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.textBox_out);
@@ -416,9 +394,6 @@ namespace comic
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.textBox_path);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -430,12 +405,6 @@ namespace comic
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -443,9 +412,6 @@ namespace comic
 
         #endregion
         private System.Windows.Forms.Label label5;
-        private System.ComponentModel.BackgroundWorker bgWorker1;
-        private System.ComponentModel.BackgroundWorker bgWorker3;
-        private System.ComponentModel.BackgroundWorker bgWorker2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
@@ -453,12 +419,6 @@ namespace comic
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label_bg_1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label_bg_2;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label_bg_3;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox_path;
         private System.Windows.Forms.Label label12;
@@ -479,6 +439,13 @@ namespace comic
         private System.Windows.Forms.TextBox textBox_out;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.TextBox textBox_maxBGWs;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListView listView3;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
+        private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.TextBox textBox_maxBGs_C;
+        private System.Windows.Forms.Button button8;
     }
 }
 

@@ -116,5 +116,13 @@ namespace comic
                 }
             }
         }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if(Convert.ToInt32(textBox_maxBGs_C.Text)>0 && Convert.ToInt32(textBox_maxBGs_C.Text) < 100)
+            {
+                textBox_maxBGWs.Text = Convert.ToInt32(textBox_maxBGs_C.Text).ToString();
+            }
+        }
     }
 }
