@@ -18,8 +18,8 @@ namespace comic
 
     public partial class Form1 : Form
     {
-        
-        
+
+
         public Form1()
         {
             InitializeComponent();
@@ -119,10 +119,27 @@ namespace comic
 
         private void button8_Click(object sender, EventArgs e)
         {
-            if(Convert.ToInt32(textBox_maxBGs_C.Text)>0 && Convert.ToInt32(textBox_maxBGs_C.Text) < 100)
+            if (Convert.ToInt32(textBox_maxBGs_C.Text) > 0 && Convert.ToInt32(textBox_maxBGs_C.Text) < 100)
             {
                 textBox_maxBGWs.Text = Convert.ToInt32(textBox_maxBGs_C.Text).ToString();
             }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            int c = 0;
+            foreach (ListViewItem var in listView3.Items)
+            {
+                c++;
+                if (!var.Selected) continue;
+                BGWs[Convert.ToUInt32(var.Text)].CancelAsync();
+                listView2.Items.Add(happyapps.DeepCopy(BGWitems[Convert.ToUInt32(var.Text)]));
+                BGWs.Remove(Convert.ToUInt32(var.Text));
+                BGWinfos.Remove(Convert.ToUInt32(var.Text));
+                BGWitems.Remove(Convert.ToUInt32(var.Text));
+            }
+            if (c != 0) textBox_out.Text += "本次将" + c.ToString() + "个任务取消" + "\r\n";
+            setTipLabel();
         }
     }
 }

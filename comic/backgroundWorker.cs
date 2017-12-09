@@ -12,6 +12,7 @@ namespace comic
         private bool[] bgStatus = new bool[3];
         private Dictionary<uint, BackgroundWorker> BGWs = new Dictionary<uint, BackgroundWorker>();
         private Dictionary<uint, string> BGWinfos = new Dictionary<uint, string>();
+        private Dictionary<uint, ListViewItem> BGWitems = new Dictionary<uint, ListViewItem>();
         private uint BGWtos;
         #region 主线程方法/委托方法
 
@@ -23,7 +24,7 @@ namespace comic
             }
             if (listView1.Items.Count == 0) return;
             pushMessage to = new pushMessage();
-            to.item = listView1.Items[0];
+            to.item = happyapps.DeepCopy(listView1.Items[0]);
             to.path = textBox_path.Text;
             uint myBGnumber = BGWtos;
             to.bgNum = myBGnumber;
@@ -64,11 +65,13 @@ namespace comic
             waitforadd.RunWorkerAsync(to);
             BGWs.Add(myBGnumber, waitforadd);
             BGWinfos.Add(myBGnumber, info);
-            setTipLabel(to);
+            BGWitems.Add(myBGnumber, happyapps.DeepCopy(listView1.Items[0]));
+            setTipLabel();
             listView1.Items.Remove(listView1.Items[0]);
+            new_call();
         }
 
-        private void setTipLabel(pushMessage p)
+        private void setTipLabel()
         {
             listView3.BeginUpdate();
             listView3.Items.Clear();
@@ -84,6 +87,10 @@ namespace comic
 
         private void bgComplete(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Cancelled)
+            {
+                return;
+            }
             if (e.Error != null)
             {
                 if (((BackgroundWorkerException)e.Error).e is DownloadFailException)
@@ -108,14 +115,18 @@ namespace comic
                 }
                 listView2.Items.Add(((BackgroundWorkerException)e.Error).push.i.i);
                 BGWs.Remove(((BackgroundWorkerException)e.Error).push.bgNum);
+                BGWinfos.Remove(((BackgroundWorkerException)e.Error).push.bgNum);
+                BGWitems.Remove(((BackgroundWorkerException)e.Error).push.bgNum);
             }
             else
             {
                 BGWs.Remove(((completeMessage)e.Result).bgNum);
+                BGWinfos.Remove(((completeMessage)e.Result).bgNum);
+                BGWitems.Remove(((completeMessage)e.Result).bgNum);
             }
             if (checkBox_auto.Checked)
                 new_call();
-
+            setTipLabel();
         }
 
         private void bgReportProcess(object sender, ProgressChangedEventArgs e)
@@ -162,13 +173,15 @@ namespace comic
             e.Result = r;
             try
             {
-
                 #region 初始化explainer
-                explainer imageGeter = _select(get.value);
+                explainer imageGeter = new fzdm();
+                if (get.type == 3) goto jumpToDownload;
+                imageGeter = _select(get.value);
                 string mURL = get.value;
                 string msource = "";
                 msource = happyapps.GetHttpWebRequest(mURL);
                 imageGeter.init((BackgroundWorker)sender, msource, get.value, get);
+                jumpToDownload:
                 #endregion
                 switch (get.type)
                 {
