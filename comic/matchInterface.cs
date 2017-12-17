@@ -22,10 +22,15 @@ namespace comic
         {
             if (url.Contains("http://www.bbhou.com/manhua/")) return true; else return false;
         }
+        public bool select_ccmanhua(string url)
+        {
+            return url.Contains("http://www.ccmanhua.net/");
+        }
         explainer _select(string url)
         {
             if (select_fzdm(url)) return new fzdm();
             else if (select_bbhou(url)) return new bbhou();
+            else if (select_ccmanhua(url)) return new ccmanhua();
             else throw new Exception("No explainer matches");
         }
     }

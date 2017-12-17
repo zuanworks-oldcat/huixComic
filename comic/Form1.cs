@@ -63,6 +63,9 @@ namespace comic
             bgStatus[1] = false;
             bgStatus[2] = false;
             button7_Click(new object(), new EventArgs());
+#if DEBUG
+            pictureBox_iP.Visible = true;
+#endif
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -96,6 +99,9 @@ namespace comic
         private void button7_Click(object sender, EventArgs e)
         {
             textBox_out.Text = "huixComic ver:" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\r\n";
+#if DEBUG
+            textBox_out.Text = "insider perview(内部预览)版本哦,加了群的人不要公开哦~要不然老猫会生气的哦~分享给自己朋友可以拉别人进群哦~";
+#endif
         }
 
         private void button1_Click(object sender, EventArgs e)
