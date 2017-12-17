@@ -100,7 +100,7 @@ namespace comic
         {
             textBox_out.Text = "huixComic ver:" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\r\n";
 #if DEBUG
-            textBox_out.Text = "insider perview(内部预览)版本哦,加了群的人不要公开哦~要不然老猫会生气的哦~分享给自己朋友可以拉别人进群哦~";
+            textBox_out.Text += "insider perview(内部预览)版本哦,加了群的人不要公开哦~要不然老猫会生气的哦~分享给自己朋友可以拉别人进群哦~";
 #endif
         }
 

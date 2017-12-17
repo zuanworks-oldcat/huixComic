@@ -1,16 +1,17 @@
-﻿using System.Reflection;
+﻿using System.Resources;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("comic")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("灰翔漫画下载器")]
+[assembly: AssemblyDescription("钻石块工作室出品-高效&纯洁")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("comic")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("钻石块工作室")]
+[assembly: AssemblyProduct("灰翔漫画下载器")]
+[assembly: AssemblyCopyright("Copyright zuanworks ©  2015-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +33,7 @@ using System.Runtime.InteropServices;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.1.9")]
+[assembly: AssemblyFileVersion("1.1.1.9")]
+[assembly: NeutralResourcesLanguage("zh-Hans")]
+
