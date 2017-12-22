@@ -75,9 +75,9 @@
     <Compile Include="backgroundWorker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="bbhou.cs" />
-    <Compile Include="ccmanhua.cs" />
-    <Compile Include="fzdm.cs" />
+    <Compile Include="matches\bbhou.cs" />
+    <Compile Include="matches\ccmanhua.cs" />
+    <Compile Include="matches\fzdm.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +85,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="happyapps.cs" />
+    <Compile Include="matches\manhuagui.cs" />
     <Compile Include="matchInterface.cs">
       <SubType>Form</SubType>
     </Compile>
