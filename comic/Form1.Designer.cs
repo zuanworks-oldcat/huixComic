@@ -77,10 +77,10 @@ namespace comic
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox_iP = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox_iP = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
@@ -91,8 +91,8 @@ namespace comic
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_iP)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label5
@@ -108,19 +108,21 @@ namespace comic
             // 
             // listView1
             // 
-            this.listView1.AllowColumnReorder = true;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.HideSelection = false;
+            this.listView1.LabelEdit = true;
             this.listView1.Location = new System.Drawing.Point(3, 23);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(331, 424);
             this.listView1.TabIndex = 23;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
             // 
             // columnHeader1
             // 
@@ -597,6 +599,17 @@ namespace comic
             this.panel1.Size = new System.Drawing.Size(1009, 453);
             this.panel1.TabIndex = 54;
             // 
+            // pictureBox_iP
+            // 
+            this.pictureBox_iP.BackgroundImage = global::comic.Properties.Resources.insiderPreview;
+            this.pictureBox_iP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox_iP.Location = new System.Drawing.Point(0, 90);
+            this.pictureBox_iP.Name = "pictureBox_iP";
+            this.pictureBox_iP.Size = new System.Drawing.Size(253, 231);
+            this.pictureBox_iP.TabIndex = 3;
+            this.pictureBox_iP.TabStop = false;
+            this.pictureBox_iP.Visible = false;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -626,17 +639,6 @@ namespace comic
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // pictureBox_iP
-            // 
-            this.pictureBox_iP.BackgroundImage = global::comic.Properties.Resources.insiderPreview;
-            this.pictureBox_iP.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox_iP.Location = new System.Drawing.Point(0, 90);
-            this.pictureBox_iP.Name = "pictureBox_iP";
-            this.pictureBox_iP.Size = new System.Drawing.Size(253, 231);
-            this.pictureBox_iP.TabIndex = 3;
-            this.pictureBox_iP.TabStop = false;
-            this.pictureBox_iP.Visible = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -665,8 +667,8 @@ namespace comic
             this.tableLayoutPanel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_iP)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

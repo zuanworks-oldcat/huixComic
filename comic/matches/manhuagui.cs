@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace comic.matches
+namespace comic
 {
     class manhuagui : explainer
     {
@@ -73,7 +73,6 @@ namespace comic.matches
             {
                 d[ee(c)] = k[c].ToString();
             }
-            string ur = "";
             foreach(var u in d)
             {
                 p.Replace(u.Key, u.Value);

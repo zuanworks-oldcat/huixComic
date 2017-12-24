@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -14,6 +15,18 @@ namespace comic
         private Dictionary<uint, string> BGWinfos = new Dictionary<uint, string>();
         private Dictionary<uint, ListViewItem> BGWitems = new Dictionary<uint, ListViewItem>();
         private uint BGWtos;
+
+        public void onDeleteBGW(uint BGWid)
+        {
+            /**before**/
+            /**do**/
+            BGWs.Remove(BGWid);
+            BGWinfos.Remove(BGWid);
+            BGWitems.Remove(BGWid);
+            /**after**/
+            
+        }
+
         #region 主线程方法/委托方法
 
         private void new_call()
@@ -93,6 +106,7 @@ namespace comic
             }
             if (e.Error != null)
             {
+                speed_test_onError();
                 if (((BackgroundWorkerException)e.Error).e is DownloadFailException)
                 {
                     textBox_out.Text += "----下载出错----" + "\r\n";
@@ -128,6 +142,14 @@ namespace comic
             if (checkBox_auto.Checked)
                 new_call();
             setTipLabel();
+            if (speed_test_onFinishTask())
+            {
+                foreach(ListViewItem i in listView2.Items)
+                {
+                    listView1.Items.Add(happyapps.DeepCopy(i));
+                }
+                listView2.Items.Clear();
+            }
         }
 
         private void bgReportProcess(object sender, ProgressChangedEventArgs e)
@@ -156,6 +178,8 @@ namespace comic
                         add.SubItems.Add(repo.tName);
                         listView1.Items.Add(add);
                         break;
+                    default:
+                        break;
                 }
                 if (checkBox_auto.Checked)
                     new_call();
@@ -177,7 +201,7 @@ namespace comic
             try
             {
                 #region 初始化explainer
-                explainer imageGeter = new fzdm();
+                explainer imageGeter = new matches.fzdm();
                 if (get.type == 3) goto jumpToDownload;
                 imageGeter = _select(get.value);
                 string mURL = get.value;
@@ -209,7 +233,10 @@ namespace comic
                         WebClient myw = new WebClient();
                         try
                         {
+                            DateTime btime = DateAndTime.Now;
                             myw.DownloadFile(get.value, get.pName);
+                            speed_test_onDownloadOK(btime, DateAndTime.Now);
+                            ((BackgroundWorker)sender).ReportProgress(1, new messageMaker().report(4, ""));
                         }
                         catch (WebException ex)
                         {

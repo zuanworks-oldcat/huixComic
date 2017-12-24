@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace comic
+namespace comic.matches
 {
     public class ccmanhua : explainer
     {
@@ -17,7 +17,7 @@ namespace comic
 
         public void getAllUnits()
         {
-            Regex r = new Regex(@"<li><a href=""([a-zA-Z0-9/\.]+)"" title=""([^""]+)"" class=""status0"" target=""_blank""><span>[^<]+<i>[^<]+</i></span></a></li>");
+            Regex r = new Regex(@"<li><a href=""([a-zA-Z0-9/\.]+)"" title=""([^""]+)""");
             MatchCollection ps = r.Matches(source);
             foreach(Match p in ps)
             {

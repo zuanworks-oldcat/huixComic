@@ -16,9 +16,10 @@
  1. [www.bbhou.com][2]
  2. [manhua.fzdm.com][3]
  3. [www.ccmanhua.net][4]
-
+ 4. [www.manhuatai.com][5]
 
   [1]: https://gitee.com/zuanshikuai/huixComic/raw/master/guide.png
   [2]: http://www.bbhou.com/
   [3]: http://manhua.fzdm.com/
   [4]: http://www.ccmanhua.net/
+  [5]: http://www.manhuatai.com/

@@ -19,7 +19,6 @@ namespace comic
     public partial class Form1 : Form
     {
 
-
         public Form1()
         {
             InitializeComponent();
@@ -70,11 +69,19 @@ namespace comic
 
         private void button2_Click_1(object sender, EventArgs e)
         {
+            bool is_test = false;
             panel1.Visible = false;
             timer1.Enabled = true;
             string ask = Interaction.InputBox("输入首页的链接", "询问：", "http://");
             if (ask != "")
             {
+                if (textBox_path.Text.IndexOf("speed_test") != -1 && listView1.Items.Count == 0)
+                {
+                    beginSpeedTest();
+                    checkBox_auto.Checked = true;
+                    textBox_maxBGWs.Text = "20";
+                    is_test = true;
+                }
                 ListViewItem i = new ListViewItem();
                 i.Text = "全>章";
                 i.SubItems.Add(ask);
@@ -82,6 +89,7 @@ namespace comic
                 i.SubItems.Add("---");
                 listView1.Items.Add(i);
             }
+            if (is_test) new_call();
         }
 
         private void button_remove_Click(object sender, EventArgs e)
@@ -155,11 +163,31 @@ namespace comic
         int news = 0;
         int dones = 0;
 
+        public void out_addLine(string text)
+        {
+            textBox_out.Text += text + "\r\n";
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             label_status.Text = string.Format("完成{1}个任务，新增{0}个任务（上一秒）", news.ToString(), dones.ToString());
             news = 0;
             dones = 0;
+        }
+
+        DateTime a = new DateTime();
+        private void listView1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                if ((DateAndTime.Now - a).TotalSeconds < 2)
+                {
+                    textBox_out.Text += "-------双击项目信息-------" + "\r\n";
+                    textBox_out.Text += "地址：" + listView1.SelectedItems[0].SubItems[1].Text + "\r\n";
+                    textBox_out.Text += "------------------------" + "\r\n";
+                }
+            }
+            a = DateAndTime.Now;
         }
     }
 }
